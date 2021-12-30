@@ -146,6 +146,7 @@ void AccountGroup::switchUser(TokenScanner& line, LoggingSituation& logStatus)
     if (!line.hasMoreToken()) {
         if (account.priority < logStatus.getPriority()) {
             logStatus.logIn(userID, account.priority, -1);
+            std::cout << account.priority << std::endl;
         } else {
             throw InvalidCommand("Invalid");
         }

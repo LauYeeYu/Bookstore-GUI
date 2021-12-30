@@ -209,7 +209,7 @@ void BookGroup::show(TokenScanner& line, const LoggingSituation& loggingStatus, 
             int* offset = _isbn_book_map.get(ISBN(bookParameter.content));
 
             if (offset == nullptr) {
-                std::cout << std::endl;
+                std::cout << 0 << std::endl;
                 return;
             } else {
                 books.push_back(*offset);
@@ -233,11 +233,12 @@ void BookGroup::show(TokenScanner& line, const LoggingSituation& loggingStatus, 
     }
 
     if (books.empty()) {
-        std::cout << std::endl;
+        std::cout << 0 << std::endl;
         return;
     }
 
     Book tmp;
+    std::cout << books.size() << std::endl;
     for (int offset : books) {
         _books.seekg(offset);
         _books.read(reinterpret_cast<char*>(&tmp), sizeof(Book));
