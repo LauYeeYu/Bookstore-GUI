@@ -6,6 +6,7 @@ test*/
 Test/
 .idea/
 .vscode/
+Bookstore
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles

@@ -1,0 +1,12 @@
+{
+  "name": "bookstore-html",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "@koa/router": "^10.1.1",
+    "koa": "^2.13.4",
+    "koa-body": "^4.2.0",
+    "nodemon": "^2.0.15"
+  }
+}
