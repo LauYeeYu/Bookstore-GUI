@@ -7,6 +7,13 @@ Test/
 .idea/
 .vscode/
 Bookstore
+account
+account_index
+book
+book_index_*
+log
+finance_log
+clear
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
