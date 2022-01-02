@@ -155,6 +155,7 @@ void AccountGroup::switchUser(TokenScanner& line, LoggingSituation& logStatus)
         if (line.hasMoreToken()) throw InvalidCommand("Invalid");
         if (checkPassword(password, account)) {
             logStatus.logIn(userID, account.priority, -1);
+            std::cout << account.priority << std::endl;
         } else {
             throw InvalidCommand("Invalid");
         }
