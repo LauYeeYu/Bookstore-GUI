@@ -3,6 +3,7 @@ import Router from '@koa/router'
 import bodyparser from 'koa-body'
 import { createInterface } from 'readline'
 import { spawn } from 'child_process'
+import request from 'koa/lib/request'
 
 const app = new koa()
 const router = new Router()
@@ -31,6 +32,9 @@ const getline = () => {
 }
 
 const buffer = []
+
+let ID = ''
+let priority = 0
 
 router.get('/', async ctx => {
     if (priority === 0) {
@@ -80,7 +84,7 @@ router.get('/user', ctx => {
         <main>
             <nav>
                 <span>Hello, ${ID}!</span>
-                <a href="/user">Main page</a>
+                <a href="/">Main page</a>
                 <a href="/show-single">Find book</a>
                 <a href="/change-password">Change password</a>
                 <a href="/logout">Logout</a>
@@ -102,6 +106,13 @@ router.get('/user', ctx => {
 router.get('/show-single', ctx => {
     putline('show')
     ctx.redirect('/show')
+})
+
+router.get('/logout', ctx => {
+    putline('logout')
+    ID = ''
+    priority = 0
+    ctx.redirect('/')
 })
 
 router.get('/show', async ctx => {
@@ -333,9 +344,6 @@ router.get('/styles.css', ctx => {
             }`
 })
 
-let ID = ''
-let priority = 0
-
 const redirectMap = {
     1: '/user',
     3: '/employee',
@@ -385,9 +393,55 @@ router.post('/buy', async ctx => {
     putline(`buy ${ISBN} ${quantity}`)
     const result = await getline()
     if (result === 'Invalid') {
-        //todo
+        ctx.body = `
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <link rel="stylesheet" href="styles.css">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>User - Bookstore</title>
+            </head>
+            <body>
+                <main>
+                    <nav>
+                        <span>Hello, ${ID}!</span>
+                        <a href="/">Main page</a>
+                        <a href="/show-single">Find book</a>
+                        <a href="/change-password">Change password</a>
+                        <a href="/logout">Logout</a>
+                    </nav>
+                    <h3>Sorry, something gets wrong.</h3>
+                    <h5>go back to<a href="/">main page</a></h5>
+                </main>
+            </body>
+        </html>
+        `
     } else {
-        //todo
+        ctx.body = `
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <link rel="stylesheet" href="styles.css">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>User - Bookstore</title>
+            </head>
+            <body>
+                <main>
+                    <nav>
+                        <span>Hello, ${ID}!</span>
+                        <a href="/">Main page</a>
+                        <a href="/show-single">Find book</a>
+                        <a href="/change-password">Change password</a>
+                        <a href="/logout">Logout</a>
+                    </nav>
+                    <h3>You spent $${result}.</h3>
+                    <h5>go back to<a href="/">main page</a></h5>
+                </main>
+            </body>
+        </html>
+        `
     }
 
 })
