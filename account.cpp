@@ -181,6 +181,7 @@ void AccountGroup::registerUser(TokenScanner& line)
 
     Account newAccount(userID, password, userName, 1);
     _add_user(newAccount);
+    std::cout << "Success" << std::endl;
 }
 
 void AccountGroup::addUser(TokenScanner& line, const LoggingSituation& logStatus)
@@ -310,6 +311,7 @@ void AccountGroup::changePassword(TokenScanner& line, const LoggingSituation& lo
             account.changePassword(password1);
             _accounts.seekp(*position);
             _accounts.write(reinterpret_cast<char*>(&account), sizeof(Account));
+            std::cout << "Success" << std::endl;
         } else {
             delete position;
             position = nullptr;
@@ -349,6 +351,7 @@ void AccountGroup::changePassword(TokenScanner& line, const LoggingSituation& lo
         account.changePassword(password2);
         _accounts.seekp(*position);
         _accounts.write(reinterpret_cast<char*>(&account), sizeof(Account));
+        std::cout << "Success" << std::endl;
     }
 
     delete position;

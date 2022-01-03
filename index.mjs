@@ -18,14 +18,14 @@ const proc = spawn('./Bookstore')
 const s = createInterface({ input: proc.stdout })
 const queue = []
 
-// 读流读到东西的时候从 queue 头取出一个函数，把读到的东西给他
+// when a read stream has found something to read put it into the queue 
 s.on('line', line => {
     if (queue.length === 0) buffer.push(line) 
     else queue.shift()(line)
 })
-// 如何给它写进去参数
+// put a line
 const putline = line => proc.stdin.write(line + '\n')
-// 如何读一个东西
+// get a line
 const getline = () => {
     if (buffer.length === 0) return new Promise(resolve => queue.push(resolve))
     else return buffer.shift()
@@ -56,6 +56,8 @@ router.get('/', async ctx => {
                         <p>Your password: <input name="password" type="password"></p>
                         <button type="submit">Submit</button>
                     </form>
+                    <p>Not have an account yet?</p>
+                    <p><a href="/register">Register</a> one!</p>
                 </div>
             </main>
         </body>
@@ -64,6 +66,34 @@ router.get('/', async ctx => {
     } else {
         ctx.redirect(redirectMap[priority])
     }
+})
+
+router.get('/register', ctx => {
+    ctx.body = `
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <link rel="stylesheet" href="styles.css">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Bookstore</title>
+        </head>
+        <body>
+            <main>
+                <h1>Register your account!</h1>
+                <div class="centre">
+                    <form action="/register" method="post">
+                        <p>Your ID: <input name="newID"></p>
+                        <p>Your name: <input name="newName"></p>
+                        <p>Your password: <input name="newPassword" type="password"></p>
+                        <p>Repeat password: <input name="repeatedPassword" type="password"></p>
+                        <button type="submit">Register</button>
+                    </form>
+                </div>
+            </main>
+        </body>
+        </html>
+        `
 })
 
 router.get('/user', ctx => {
@@ -94,7 +124,7 @@ router.get('/user', ctx => {
                 <form action="/buy" method="post">
                     <p>ISBN: <input name="ISBN"></p>
                     <p>Quantity: <input name="quantity"></p>
-                    <button type="buy">Buy</button>
+                    <button type="submit">Buy</button>
                 </form>
             </div>
         </main>
@@ -108,8 +138,9 @@ router.get('/show-single', ctx => {
     ctx.redirect('/show')
 })
 
-router.get('/logout', ctx => {
+router.get('/logout', async ctx => {
     putline('logout')
+    const result = getline()
     ID = ''
     priority = 0
     ctx.redirect('/')
@@ -149,7 +180,7 @@ router.get('/show', async ctx => {
                         <option value="keyword">keyword</option>
                     </select>
                     <input name="token">
-                    <button type="search">Search</button>
+                    <button type="submit">Search</button>
                 </form>
                 <table border="1" class="centre">
                     <tr>
@@ -179,6 +210,42 @@ router.get('/show', async ctx => {
 
     ctx.body += `
             </table>
+        </main>
+    </body>
+    </html>
+    `
+})
+
+router.get('/change-password', ctx => {
+    ctx.body = `
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="styles.css">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>User - Bookstore</title>
+    </head>
+    <body>
+        <main>
+            <nav>
+                <span>Hello, ${ID}!</span>
+                <a href="/">Main page</a>
+                <a href="/show-single">Find book</a>
+                <a href="/change-password">Change password</a>
+                <a href="/logout">Logout</a>
+            </nav>
+            <h1>Change your password</h1>
+            <div class="centre">
+                <div class="centre">
+                <form action="/change-password" method="post">
+                    <p>Old paasword: <input name="oldPassword" type="password"></p>
+                    <p>New password: <input name="newPassword" type="password"></p>
+                    <p>Repeat password: <input name="repeatedNewPassword" type="password"></p>
+                    <button type="submit">Change</button>
+                </form>
+            </div>
+            </div>
         </main>
     </body>
     </html>
@@ -358,10 +425,159 @@ router.post('/login', async ctx => {
     if (result === 'Invalid') {
         ID = ''
         priority = 0
-        ctx.redirect('/')
+        ctx.body = `
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <link rel="stylesheet" href="styles.css">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>User - Bookstore</title>
+            </head>
+            <body>
+                <main>
+                    <h3>Sorry, something gets wrong.</h3>
+                    <h5>go back to<a href="/">main page</a></h5>
+                </main>
+            </body>
+        </html>
+        `
     } else if ([ '1', '3', '7' ].includes(result)) {
         priority = Number(result)
         ctx.redirect(redirectMap[result])
+    }
+})
+
+router.post('/register', async ctx => {
+    const newID = ctx.request.body?.newID
+    const newName = ctx.request.body?.newName
+    const newPassword = ctx.request.body?.newPassword
+    const repeatedPassword = ctx.request.body?.repeatedPassword
+
+    if (newPassword !== repeatedPassword) {
+        ctx.body = `
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <link rel="stylesheet" href="styles.css">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>User - Bookstore</title>
+            </head>
+            <body>
+                <main>
+                    <h3>Sorry, incorrect password.</h3>
+                    <h5>go back to<a href="/">main page</a></h5>
+                </main>
+            </body>
+        </html>
+        `
+    } else {
+        putline(`register ${newID} ${newPassword} ${newName}`)
+        const result = await getline()
+        if (result === 'Invalid') {
+            ctx.body = `
+            <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <link rel="stylesheet" href="styles.css">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>User - Bookstore</title>
+                </head>
+                <body>
+                    <main>
+                        <h3>Sorry, something gets wrong.</h3>
+                        <h5>go back to<a href="/">main page</a></h5>
+                    </main>
+                </body>
+            </html>
+            `
+        } else {
+            ctx.body = `
+            <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <link rel="stylesheet" href="styles.css">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>User - Bookstore</title>
+                </head>
+                <body>
+                    <main>
+                        <h3>Success!</h3>
+                        <h5>go back to<a href="/">main page</a></h5>
+                    </main>
+                </body>
+            </html>
+            `
+        }
+    }
+})
+
+router.post('/change-password', async ctx => {
+    const oldPassword = ctx.request.body?.oldPassword
+    const newPassword = ctx.request.body?.newPassword
+    const repeatedPassword = ctx.request.body?.repeatedNewPassword
+
+    if (newPassword !== repeatedPassword) {
+        ctx.body = `
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <link rel="stylesheet" href="styles.css">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>User - Bookstore</title>
+            </head>
+            <body>
+                <main>
+                    <h3>Sorry, incorrect new password.</h3>
+                    <h5>go back to<a href="/">main page</a></h5>
+                </main>
+            </body>
+        </html>
+        `
+    } else {
+        putline(`passwd ${ID} ${oldPassword} ${newPassword}`)
+        const result = await getline()
+        if (result === 'Invalid') {
+            ctx.body = `
+            <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <link rel="stylesheet" href="styles.css">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>User - Bookstore</title>
+                </head>
+                <body>
+                    <main>
+                        <h3>Sorry, something gets wrong.</h3>
+                        <h5>go back to<a href="/">main page</a></h5>
+                    </main>
+                </body>
+            </html>
+            `
+        } else {
+            ctx.body = `
+            <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <link rel="stylesheet" href="styles.css">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>User - Bookstore</title>
+                </head>
+                <body>
+                    <main>
+                        <h3>Success!</h3>
+                        <h5>go back to<a href="/">main page</a></h5>
+                    </main>
+                </body>
+            </html>
+            `
+        }
     }
 })
 

@@ -51,6 +51,7 @@ bool processLine(AccountGroup& accounts, BookGroup& books,
     } else if (command == "logout") {
         if (line.hasMoreToken()) throw InvalidCommand("Invalid");
         logInStack.logOut();
+        std::cout << "Success" << std::endl;
     } else if (command == "register") {
         accounts.registerUser(line);
     } else if (command == "passwd") {
