@@ -115,7 +115,91 @@ router.get('/user', ctx => {
             <nav>
                 <span>Hello, ${ID}!</span>
                 <a href="/">Main page</a>
-                <a href="/show-single">Find book</a>
+                <a href="/show-single">Find</a>
+                <a href="/change-password">Change password</a>
+                <a href="/logout">Logout</a>
+            </nav>
+            <h1>Book List</h1>
+            <div class="centre">
+                <form action="/buy" method="post">
+                    <p>ISBN: <input name="ISBN"></p>
+                    <p>Quantity: <input name="quantity"></p>
+                    <button type="submit">Buy</button>
+                </form>
+            </div>
+        </main>
+    </body>
+    </html>
+    `
+})
+
+router.get('/employee', ctx => {
+    if (priority !== 3) {
+        ctx.redirect(redirectMap[priority])
+        return
+    }
+    ctx.body = `
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="styles.css">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>User - Bookstore</title>
+    </head>
+    <body>
+        <main>
+            <nav>
+                <span>Hello, ${ID}!</span>
+                <a href="/">Main page</a>
+                <a href="/show-single">Find</a>
+                <a href="/add-user">Add user</a>
+                <a href="/select">Select</a>
+                <a href="/modify">Modify</a>
+                <a href="/import">Import</a>
+                <a href="/change-password">Change password</a>
+                <a href="/logout">Logout</a>
+            </nav>
+            <h1>Book List</h1>
+            <div class="centre">
+                <form action="/buy" method="post">
+                    <p>ISBN: <input name="ISBN"></p>
+                    <p>Quantity: <input name="quantity"></p>
+                    <button type="submit">Buy</button>
+                </form>
+            </div>
+        </main>
+    </body>
+    </html>
+    `
+})
+
+router.get('/root', ctx => {
+    if (priority !== 7) {
+        ctx.redirect(redirectMap[priority])
+        return
+    }
+    ctx.body = `
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="styles.css">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>User - Bookstore</title>
+    </head>
+    <body>
+        <main>
+            <nav>
+                <span>Hello, ${ID}!</span>
+                <a href="/">Main page</a>
+                <a href="/add-user">Add user</a>
+                <a href="/delete-user">Delete user</a>
+                <a href="/show-single">Find</a>
+                <a href="/select">Select</a>
+                <a href="/modify">Modify</a>
+                <a href="/import">Import</a>
+                <a href="/finance">Finance</a>
                 <a href="/change-password">Change password</a>
                 <a href="/logout">Logout</a>
             </nav>
@@ -148,6 +232,10 @@ router.get('/logout', async ctx => {
 
 router.get('/show', async ctx => {
     const num = await getline()
+    if (priority === 0) {
+        ctx.redirect('/')
+        return
+    }
     if (num === 'Invalid') {
         ctx.redirect('/')
         return
@@ -165,10 +253,7 @@ router.get('/show', async ctx => {
             <body>
                 <nav>
                     <span>Hello, ${ID}!</span>
-                    <a href="/">Main page</a>
-                    <a href="/show-single">Find book</a>
-                    <a href="/change-password">Change password</a>
-                    <a href="/logout">Logout</a>
+                    <a href="/"> Back to main page</a>
                 </nav>
 
                 <form action="/show-with-character" method="post">
@@ -217,6 +302,10 @@ router.get('/show', async ctx => {
 })
 
 router.get('/change-password', ctx => {
+    if (priority === 0) {
+        ctx.redirect('/')
+        return
+    }
     ctx.body = `
     <html>
     <head>
@@ -663,8 +752,6 @@ router.post('/buy', async ctx => {
 })
 
 router.get('/login', async ctx => {
-    ID = ''
-    priority = 0
     ctx.redirect('/')
 })
 
