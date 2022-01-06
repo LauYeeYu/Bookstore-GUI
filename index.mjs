@@ -199,7 +199,7 @@ router.get('/root', ctx => {
                 <a href="/select">Select</a>
                 <a href="/modify">Modify</a>
                 <a href="/import">Import</a>
-                <a href="/finance">Finance</a>
+                <a href="/finance-all">Finance</a>
                 <a href="/change-password">Change password</a>
                 <a href="/logout">Logout</a>
             </nav>
@@ -213,6 +213,79 @@ router.get('/root', ctx => {
             </div>
         </main>
     </body>
+    </html>
+    `
+})
+
+router.get('/finance-all', ctx => {
+    putline(`show finance`)
+    ctx.redirect('/finance')
+})
+
+router.get('/finance', async ctx => {
+    const finance = await getline()
+    if (priority === 0) {
+        ctx.redirect('/')
+        return
+    }
+    if (finance === 'Invalid') {
+        if (result === 'Invalid') {
+            ctx.body = `
+            <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <link rel="stylesheet" href="styles.css">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Result - Bookstore</title>
+                </head>
+                <body>
+                    <main>
+                        <h3>Sorry, invalid operation.</h3>
+                        <h5>go back to<a href="/">main page</a></h5>
+                    </main>
+                </body>
+            </html>
+            `
+        }
+        return
+    }
+    const [ income, expenditure ] = finance.split('\t')
+    ctx.body = `
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="styles.css">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Book Details - Bookstore</title>
+    </head>
+    <main>
+        <body>
+            <nav>
+                <span>Hello, ${ID}!</span>
+                <a href="/">Main page</a>
+                <a href="/logout">Logout</a>
+            </nav>
+
+            <form action="/finance" method="post">
+                Set Limit: <input name="limit">
+                <button type="submit">Check</button>
+            </form>
+            <div class="centre">
+                <table border="1" class="centre">
+                    <tr>
+                        <th> Income </th>
+                        <th> Expenditure </th>
+                    </tr>
+                    <tr>
+                        <td> ${income} </td>
+                        <td> ${expenditure} </td>
+                    <tr>
+                </table>
+            </div>
+        </body>
+    </main>
     </html>
     `
 })
@@ -1178,6 +1251,12 @@ router.post('/import', async ctx => {
         </html>
         `
     }
+})
+
+router.post('/finance', async ctx => {
+    const limit = ctx.request.body?.limit
+    putline(`show finance ${limit}`)
+    ctx.redirect('/finance')
 })
 
 router.get('/login', async ctx => {

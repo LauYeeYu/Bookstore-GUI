@@ -58,7 +58,8 @@ void LogGroup::show(TokenScanner& line, const LoggingSituation& loggingStatus)
         if (line.hasMoreToken()) throw InvalidCommand("Invalid");
         int limit = stringToInt(limitString);
         if (limit == 0) {
-            std::cout << std::endl;
+            std::cout << std::fixed << std::setprecision(2) 
+                      << income <<'\t' << expenditure << std::endl;
             return;
         }
         _finance_logs.seekp(0, std::ios::end);
@@ -83,7 +84,7 @@ void LogGroup::show(TokenScanner& line, const LoggingSituation& loggingStatus)
             else expenditure += financeLog.sum;
         }
     }
-    std::cout << std::fixed << std::setprecision(2) << "+ " << income << " - " << expenditure << std::endl;
+    std::cout << std::fixed << std::setprecision(2) << income << '\t' << expenditure << std::endl;
 }
 
 void LogGroup::flush()
