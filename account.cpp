@@ -241,6 +241,8 @@ void AccountGroup::addUser(TokenScanner& line, const LoggingSituation& logStatus
     Log newLog(Log::addUser, 0, 0, false, UserID(logStatus.getID()),
                -1, logDescription, logStatus.getPriority());
     logs.addLog(newLog);
+
+    std::cout << "Success" << std::endl;
 }
 
 void AccountGroup::deleteUser(TokenScanner& line, const LoggingSituation& logStatus, LogGroup& logs)

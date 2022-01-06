@@ -54,7 +54,7 @@ router.get('/', async ctx => {
                     <form action="/login" method="post">
                         <p>Your ID: <input name="ID"></p>
                         <p>Your password: <input name="password" type="password"></p>
-                        <button type="submit">Submit</button>
+                        <button type="submit">login</button>
                     </form>
                     <p>Not have an account yet?</p>
                     <p><a href="/register">Register</a> one!</p>
@@ -145,7 +145,7 @@ router.get('/employee', ctx => {
         <link rel="stylesheet" href="styles.css">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>User - Bookstore</title>
+        <title>Employee - Bookstore</title>
     </head>
     <body>
         <main>
@@ -186,7 +186,7 @@ router.get('/root', ctx => {
         <link rel="stylesheet" href="styles.css">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>User - Bookstore</title>
+        <title>Root - Bookstore</title>
     </head>
     <body>
         <main>
@@ -209,6 +209,40 @@ router.get('/root', ctx => {
                     <p>ISBN: <input name="ISBN"></p>
                     <p>Quantity: <input name="quantity"></p>
                     <button type="submit">Buy</button>
+                </form>
+            </div>
+        </main>
+    </body>
+    </html>
+    `
+})
+
+router.get('/add-user', ctx => {
+    ctx.body = `
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="styles.css">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Add User - Bookstore</title>
+    </head>
+    <body>
+        <main>
+            <nav>
+                <span>Hello, ${ID}!</span>
+                <a href="/">Main page</a>
+                <a href="/logout">Logout</a>
+            </nav>
+            <h1>Add a New User</h1>
+            <div class="centre">
+                <form action="/add-user" method="post">
+                    <p>UserID: <input name="userID"></p>
+                    <p>Password: <input name="password" type="password"></p>
+                    <p>Repeat Password: <input name="repeatedPassword" type="password"></p>
+                    <p>Priority: <input name="priority"></p>
+                    <p>UserName: <input name="userName"></p>
+                    <button type="submit">add user</button>
                 </form>
             </div>
         </main>
@@ -247,7 +281,7 @@ router.get('/show', async ctx => {
         <link rel="stylesheet" href="styles.css">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>User - Bookstore</title>
+        <title>Book Details - Bookstore</title>
     </head>
         <main>
             <body>
@@ -313,7 +347,7 @@ router.get('/change-password', ctx => {
         <link rel="stylesheet" href="styles.css">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>User - Bookstore</title>
+        <title>Change Password - Bookstore</title>
     </head>
     <body>
         <main>
@@ -339,6 +373,10 @@ router.get('/change-password', ctx => {
     </body>
     </html>
     `
+})
+
+router.get('/undefined', ctx => {
+    ctx.redirect('/')
 })
 
 router.get('/styles.css', ctx => {
@@ -521,11 +559,11 @@ router.post('/login', async ctx => {
                 <link rel="stylesheet" href="styles.css">
                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>User - Bookstore</title>
+                <title>Result - Bookstore</title>
             </head>
             <body>
                 <main>
-                    <h3>Sorry, something gets wrong.</h3>
+                    <h3>Sorry, please try again.</h3>
                     <h5>go back to<a href="/">main page</a></h5>
                 </main>
             </body>
@@ -551,7 +589,7 @@ router.post('/register', async ctx => {
                 <link rel="stylesheet" href="styles.css">
                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>User - Bookstore</title>
+                <title>Result - Bookstore</title>
             </head>
             <body>
                 <main>
@@ -572,7 +610,7 @@ router.post('/register', async ctx => {
                     <link rel="stylesheet" href="styles.css">
                     <meta http-equiv="X-UA-Compatible" content="IE=edge">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>User - Bookstore</title>
+                    <title>Result - Bookstore</title>
                 </head>
                 <body>
                     <main>
@@ -590,7 +628,7 @@ router.post('/register', async ctx => {
                     <link rel="stylesheet" href="styles.css">
                     <meta http-equiv="X-UA-Compatible" content="IE=edge">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>User - Bookstore</title>
+                    <title>Result - Bookstore</title>
                 </head>
                 <body>
                     <main>
@@ -617,7 +655,7 @@ router.post('/change-password', async ctx => {
                 <link rel="stylesheet" href="styles.css">
                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>User - Bookstore</title>
+                <title>Result - Bookstore</title>
             </head>
             <body>
                 <main>
@@ -638,7 +676,7 @@ router.post('/change-password', async ctx => {
                     <link rel="stylesheet" href="styles.css">
                     <meta http-equiv="X-UA-Compatible" content="IE=edge">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>User - Bookstore</title>
+                    <title>Result - Bookstore</title>
                 </head>
                 <body>
                     <main>
@@ -656,7 +694,7 @@ router.post('/change-password', async ctx => {
                     <link rel="stylesheet" href="styles.css">
                     <meta http-equiv="X-UA-Compatible" content="IE=edge">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>User - Bookstore</title>
+                    <title>Result - Bookstore</title>
                 </head>
                 <body>
                     <main>
@@ -705,17 +743,10 @@ router.post('/buy', async ctx => {
                 <link rel="stylesheet" href="styles.css">
                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>User - Bookstore</title>
+                <title>Result - Bookstore</title>
             </head>
             <body>
                 <main>
-                    <nav>
-                        <span>Hello, ${ID}!</span>
-                        <a href="/">Main page</a>
-                        <a href="/show-single">Find book</a>
-                        <a href="/change-password">Change password</a>
-                        <a href="/logout">Logout</a>
-                    </nav>
                     <h3>Sorry, something gets wrong.</h3>
                     <h5>go back to<a href="/">main page</a></h5>
                 </main>
@@ -730,17 +761,10 @@ router.post('/buy', async ctx => {
                 <link rel="stylesheet" href="styles.css">
                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>User - Bookstore</title>
+                <title>Result - Bookstore</title>
             </head>
             <body>
                 <main>
-                    <nav>
-                        <span>Hello, ${ID}!</span>
-                        <a href="/">Main page</a>
-                        <a href="/show-single">Find book</a>
-                        <a href="/change-password">Change password</a>
-                        <a href="/logout">Logout</a>
-                    </nav>
                     <h3>You spent $${result}.</h3>
                     <h5>go back to<a href="/">main page</a></h5>
                 </main>
@@ -748,7 +772,73 @@ router.post('/buy', async ctx => {
         </html>
         `
     }
+})
 
+router.post('/add-user', async ctx => {
+    const userID = ctx.request.body?.userID
+    const password = ctx.request.body?.password
+    const repeatedPassword = ctx.request.body?.repeatedPassword
+    const newPriority = ctx.request.body?.priority
+    const userName = ctx.request.body?.userName
+
+    if (password !== repeatedPassword) {
+        ctx.body = `
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <link rel="stylesheet" href="styles.css">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Result - Bookstore</title>
+            </head>
+            <body>
+                <main>
+                    <h3>Sorry, incorrect password.</h3>
+                    <h5>go back to<a href="/">main page</a></h5>
+                </main>
+            </body>
+        </html>
+        `
+    }
+    putline(`useradd ${userID} ${password} ${newPriority} ${userName}`)
+    const result = await getline()
+    if (result === 'Invalid') {
+        ctx.body = `
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <link rel="stylesheet" href="styles.css">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Result - Bookstore</title>
+            </head>
+            <body>
+                <main>
+                    <h3>Sorry, something gets wrong.</h3>
+                    <h5>go back to<a href="/">main page</a></h5>
+                </main>
+            </body>
+        </html>
+        `
+    } else {
+        ctx.body = `
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <link rel="stylesheet" href="styles.css">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Result - Bookstore</title>
+            </head>
+            <body>
+                <main>
+                    <h3>Success!</h3>
+                    <h5>go back to<a href="/">main page</a></h5>
+                </main>
+            </body>
+        </html>
+        `
+    }
 })
 
 router.get('/login', async ctx => {
