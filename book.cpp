@@ -437,6 +437,8 @@ void BookGroup::modify(TokenScanner& line, const LoggingSituation& loggingStatus
         // Put the book back
         _books.seekp(loggingStatus.getSelected());
         _books.write(reinterpret_cast<const char*>(&bookToModify), sizeof(Book));
+
+        std::cout << "Success" << std::endl;
     }
 }
 

@@ -313,33 +313,34 @@ router.get('/show', async ctx => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Book Details - Bookstore</title>
     </head>
-        <main>
-            <body>
-                <nav>
-                    <span>Hello, ${ID}!</span>
-                    <a href="/"> Back to main page</a>
-                </nav>
+    <main>
+        <body>
+            <nav>
+                <span>Hello, ${ID}!</span>
+                <a href="/">Main page</a>
+                <a href="/logout">Logout</a>
+            </nav>
 
-                <form action="/show-with-character" method="post">
-                    <select name="type" id="pet-select">
-                        <option value="">-Choose an option-</option>
-                        <option value="ISBN">ISBN</option>
-                        <option value="name">name</option>
-                        <option value="author">author</option>
-                        <option value="keyword">keyword</option>
-                    </select>
-                    <input name="token">
-                    <button type="submit">Search</button>
-                </form>
-                <table border="1" class="centre">
-                    <tr>
-                        <th>ISBN</th>
-                        <th>Name</th>
-                        <th>Author</th>
-                        <th>Keyword</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                    </tr>
+            <form action="/show-with-character" method="post">
+                <select name="type" id="show">
+                    <option value="">-Choose an option-</option>
+                    <option value="ISBN">ISBN</option>
+                    <option value="name">name</option>
+                    <option value="author">author</option>
+                    <option value="keyword">keyword</option>
+                </select>
+                <input name="token">
+                <button type="submit">Search</button>
+            </form>
+            <table border="1" class="centre">
+                <tr>
+                    <th>ISBN</th>
+                    <th>Name</th>
+                    <th>Author</th>
+                    <th>Keyword</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                </tr>
             
     `
 
@@ -359,11 +360,49 @@ router.get('/show', async ctx => {
 
     ctx.body += `
             </table>
-        </main>
-    </body>
+        </body>
+    </main>
     </html>
     `
 })
+
+router.get('/modify', ctx => {
+    ctx.body = `
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="styles.css">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Modify Book Info - Bookstore</title>
+    </head>
+    <main>
+        <body>
+            <nav>
+                <span>Hello, ${ID}!</span>
+                <a href="/">Main page</a>
+                <a href="/logout">Logout</a>
+            </nav>
+
+            <form action="/modify" method="post">
+                <select name="type" id="modify">
+                    <option value="">-Choose an option-</option>
+                    <option value="ISBN">ISBN</option>
+                    <option value="name">name</option>
+                    <option value="author">author</option>
+                    <option value="keyword">keyword</option>
+                    <option value="price">price</option>
+                </select>
+                <input name="token">
+                <button type="submit">modify</button>
+            </form>
+        <body>
+    </main>
+    </html>
+    `
+})
+
+
 
 router.get('/change-password', ctx => {
     if (priority === 0) {
@@ -757,6 +796,80 @@ router.post('/show-with-character', ctx => {
     } else if (type === 'keyword') {
         putline(`show -keyword="${token}"`)
         ctx.redirect('/show')
+    }
+})
+
+router.post('/modify', async ctx => {
+    const type = ctx.request.body?.type
+    const token = ctx.request.body?.token
+    if (type === '') {
+        ctx.body = `
+            <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <link rel="stylesheet" href="styles.css">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Result - Bookstore</title>
+                </head>
+                <body>
+                    <main>
+                        <h3>Please choose an option</h3>
+                        <h5><a href="/modify">retry</a></h5>
+                        <h5>go back to<a href="/">main page</a></h5>
+                    </main>
+                </body>
+            </html>
+            `
+            return
+    } else if (type === 'name') {
+        putline(`modify -name="${token}"`)
+    } else if (type === 'author') {
+        putline(`modify -author="${token}"`)
+    } else if (type === 'ISBN') {
+        putline(`modify -ISBN=${token}`)
+    } else if (type === 'keyword') {
+        putline(`modify -keyword="${token}"`)
+    } else if (type === 'price') {
+        putline(`modify -price=${token}`)
+    }
+    const result = await getline()
+    if (result === 'Invalid') {
+        ctx.body = `
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <link rel="stylesheet" href="styles.css">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Result - Bookstore</title>
+            </head>
+            <body>
+                <main>
+                    <h3>Sorry, something gets wrong.</h3>
+                    <h5>go back to<a href="/">main page</a></h5>
+                </main>
+            </body>
+        </html>
+        `
+    } else {
+        ctx.body = `
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <link rel="stylesheet" href="styles.css">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Result - Bookstore</title>
+            </head>
+            <body>
+                <main>
+                    <h3>Success.</h3>
+                    <h5>go back to<a href="/">main page</a></h5>
+                </main>
+            </body>
+        </html>
+        `
     }
 })
 
