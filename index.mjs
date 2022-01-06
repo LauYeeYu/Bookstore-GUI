@@ -281,6 +281,67 @@ router.get('/select', ctx => {
     `
 })
 
+router.get('/import', ctx => {
+    ctx.body = `
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="styles.css">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Import Books - Bookstore</title>
+    </head>
+    <body>
+        <main>
+            <nav>
+                <span>Hello, ${ID}!</span>
+                <a href="/">Main page</a>
+                <a href="/logout">Logout</a>
+            </nav>
+            <h1>Import Books</h1>
+            <div class="centre">
+                <form action="/import" method="post">
+                    <p>Quantity: <input name="quantity"></p>
+                    <p>Total Cost: <input name="totalCost"></p>
+                    <button type="submit">import</button>
+                </form>
+            </div>
+        </main>
+    </body>
+    </html>
+    `
+})
+
+router.get('/delete-user', ctx => {
+    ctx.body = `
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="styles.css">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Delete User - Bookstore</title>
+    </head>
+    <body>
+        <main>
+            <nav>
+                <span>Hello, ${ID}!</span>
+                <a href="/">Main page</a>
+                <a href="/logout">Logout</a>
+            </nav>
+            <h1>Delete User</h1>
+            <div class="centre">
+                <form action="/delete-user" method="post">
+                    <p>UserID: <input name="userID"></p>
+                    <button type="submit">delete</button>
+                </form>
+            </div>
+        </main>
+    </body>
+    </html>
+    `
+})
+
 router.get('/show-single', ctx => {
     putline('show')
     ctx.redirect('/show')
@@ -749,7 +810,7 @@ router.post('/change-password', async ctx => {
                 </head>
                 <body>
                     <main>
-                        <h3>Sorry, something gets wrong.</h3>
+                        <h3>Sorry, invalid operation.</h3>
                         <h5>go back to<a href="/">main page</a></h5>
                     </main>
                 </body>
@@ -846,7 +907,7 @@ router.post('/modify', async ctx => {
             </head>
             <body>
                 <main>
-                    <h3>Sorry, something gets wrong.</h3>
+                    <h3>Sorry, invalid operation.</h3>
                     <h5>go back to<a href="/">main page</a></h5>
                 </main>
             </body>
@@ -864,7 +925,7 @@ router.post('/modify', async ctx => {
             </head>
             <body>
                 <main>
-                    <h3>Success.</h3>
+                    <h3>Success!</h3>
                     <h5>go back to<a href="/">main page</a></h5>
                 </main>
             </body>
@@ -890,7 +951,7 @@ router.post('/buy', async ctx => {
             </head>
             <body>
                 <main>
-                    <h3>Sorry, something gets wrong.</h3>
+                    <h3>Sorry, invalid operation.</h3>
                     <h5>go back to<a href="/">main page</a></h5>
                 </main>
             </body>
@@ -958,7 +1019,7 @@ router.post('/add-user', async ctx => {
             </head>
             <body>
                 <main>
-                    <h3>Sorry, something gets wrong.</h3>
+                    <h3>Sorry, invalid operation.</h3>
                     <h5>go back to<a href="/">main page</a></h5>
                 </main>
             </body>
@@ -977,6 +1038,7 @@ router.post('/add-user', async ctx => {
             <body>
                 <main>
                     <h3>Success!</h3>
+                    <h3>You have added the user ${userID}.</h3>
                     <h5>go back to<a href="/">main page</a></h5>
                 </main>
             </body>
@@ -1001,7 +1063,7 @@ router.post('/select', async ctx =>{
             </head>
             <body>
                 <main>
-                    <h3>Sorry, something gets wrong.</h3>
+                    <h3>Sorry, invalid operation.</h3>
                     <h5>go back to<a href="/">main page</a></h5>
                 </main>
             </body>
@@ -1020,6 +1082,96 @@ router.post('/select', async ctx =>{
             <body>
                 <main>
                     <h3>Success!</h3>
+                    <h3>You have selected ${ISBN}.</h3>
+                    <h5>go back to<a href="/">main page</a></h5>
+                </main>
+            </body>
+        </html>
+        `
+    }
+})
+
+router.post('/delete-user', async ctx => {
+    const userID = ctx.request.body?.userID
+    putline(`delete ${userID}`)
+    const result = await getline()
+    if (result === 'Invalid') {
+        ctx.body = `
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <link rel="stylesheet" href="styles.css">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Result - Bookstore</title>
+            </head>
+            <body>
+                <main>
+                    <h3>Sorry, invalid operation.</h3>
+                    <h5>go back to<a href="/">main page</a></h5>
+                </main>
+            </body>
+        </html>
+        `
+    } else {
+        ctx.body = `
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <link rel="stylesheet" href="styles.css">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Result - Bookstore</title>
+            </head>
+            <body>
+                <main>
+                    <h3>Success!</h3>
+                    <h3>You have deleted: ${userID}.</h3>
+                    <h5>go back to<a href="/">main page</a></h5>
+                </main>
+            </body>
+        </html>
+        `
+    }
+})
+
+router.post('/import', async ctx => {
+    const quantity = ctx.request.body?.quantity
+    const totalCost = ctx.request.body?.totalCost
+    putline(`import ${quantity} ${totalCost}`)
+    const result = await getline()
+    if (result === 'Invalid') {
+        ctx.body = `
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <link rel="stylesheet" href="styles.css">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Result - Bookstore</title>
+            </head>
+            <body>
+                <main>
+                    <h3>Sorry, invalid operation.</h3>
+                    <h5>go back to<a href="/">main page</a></h5>
+                </main>
+            </body>
+        </html>
+        `
+    } else {
+        ctx.body = `
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <link rel="stylesheet" href="styles.css">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Result - Bookstore</title>
+            </head>
+            <body>
+                <main>
+                    <h3>Success!</h3>
+                    <h3>You have imported ${quantity} book(s) with $${totalCost}.</h3>
                     <h5>go back to<a href="/">main page</a></h5>
                 </main>
             </body>

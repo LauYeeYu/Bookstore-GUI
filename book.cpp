@@ -526,6 +526,8 @@ void BookGroup::importBook(TokenScanner& line, const LoggingSituation& loggingSt
     logGroup.addLog(log);
     FinanceLog financeLog{totalCost, false};
     logGroup.addFinanceLog(financeLog);
+
+    std::cout << "Success" << std::endl;
 }
 
 void BookGroup::select(TokenScanner& line, LoggingSituation& loggingStatus, LogGroup& logGroup)

@@ -275,6 +275,8 @@ void AccountGroup::deleteUser(TokenScanner& line, const LoggingSituation& logSta
     Log newLog(Log::deleteUser, 0, 0, false, UserID(logStatus.getID()),
                -1, logDescription, logStatus.getPriority());
     logs.addLog(newLog);
+
+    std::cout << "Success" << std::endl;
 }
 
 Account AccountGroup::find(const string_t& userID)
