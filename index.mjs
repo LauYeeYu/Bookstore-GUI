@@ -251,6 +251,36 @@ router.get('/add-user', ctx => {
     `
 })
 
+router.get('/select', ctx => {
+    ctx.body = `
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="styles.css">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Select a Book - Bookstore</title>
+    </head>
+    <body>
+        <main>
+            <nav>
+                <span>Hello, ${ID}!</span>
+                <a href="/">Main page</a>
+                <a href="/logout">Logout</a>
+            </nav>
+            <h1>Select a Book</h1>
+            <div class="centre">
+                <form action="/select" method="post">
+                    <p>ISBN: <input name="ISBN"></p>
+                    <button type="submit">select</button>
+                </form>
+            </div>
+        </main>
+    </body>
+    </html>
+    `
+})
+
 router.get('/show-single', ctx => {
     putline('show')
     ctx.redirect('/show')
@@ -799,8 +829,52 @@ router.post('/add-user', async ctx => {
             </body>
         </html>
         `
+        return
     }
     putline(`useradd ${userID} ${password} ${newPriority} ${userName}`)
+    const result = await getline()
+    if (result === 'Invalid') {
+        ctx.body = `
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <link rel="stylesheet" href="styles.css">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Result - Bookstore</title>
+            </head>
+            <body>
+                <main>
+                    <h3>Sorry, something gets wrong.</h3>
+                    <h5>go back to<a href="/">main page</a></h5>
+                </main>
+            </body>
+        </html>
+        `
+    } else {
+        ctx.body = `
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <link rel="stylesheet" href="styles.css">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Result - Bookstore</title>
+            </head>
+            <body>
+                <main>
+                    <h3>Success!</h3>
+                    <h5>go back to<a href="/">main page</a></h5>
+                </main>
+            </body>
+        </html>
+        `
+    }
+})
+
+router.post('/select', async ctx =>{
+    const ISBN = ctx.request.body?.ISBN
+    putline(`select ${ISBN}`)
     const result = await getline()
     if (result === 'Invalid') {
         ctx.body = `

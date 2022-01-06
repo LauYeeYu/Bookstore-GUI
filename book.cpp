@@ -553,6 +553,8 @@ void BookGroup::select(TokenScanner& line, LoggingSituation& loggingStatus, LogG
     }
 
     loggingStatus.select(offset);
+
+    std::cout << "Success" << std::endl;
 }
 
 void BookGroup::flush()
