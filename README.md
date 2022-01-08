@@ -19,8 +19,10 @@ accounts to its searching speed.
 
 ## How to Use 使用方法
 
-Before using this system, please type `cmake . & make` in a terminal to compile
-the backend code.  Then open the website `localhost:8080` to open the user
-interface.
+Before using this system, please type `cmake .` then type `make` in a terminal
+to compile the backend code.  Then type `yarn` to prepare the working 
+environment, and type node `index.mjs`. Finally, open the website
+`localhost:8080` in the web browser to open the user interface.
 
-在使用本系統前，請先在命令行中輸入 `cmake . & make` 以編譯此程式之後端，然後運行 `index.mjs` 並在瀏覽器中輸入 `localhst:8080` 以開啓用戶界面。
+在使用本系統前，請先在命令行中輸入 `cmake . & make` 以編譯此程式之後端，然後輸入 `yarn` 以配置運行環境。待一切準備就緒時，
+運行 `index.mjs` 並在瀏覽器中輸入 `localhst:8080` 以開啓用戶界面。
