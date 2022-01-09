@@ -603,7 +603,7 @@ router.get('/styles.css', ctx => {
                 text-align: center;
                 background-color: #fcfffc;
                 color: #222;
-                border-top: 4px solid #56d66f;
+                border-top: 4px solid #6186b6;
             }
             main {
                 padding-top: 64px;
